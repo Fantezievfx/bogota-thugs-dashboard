@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel – Bogota Thugs</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app">
+    <%- include('partials/sidebar'); %>
+
+    <main class="content">
+      <div class="page-header">
+        <h1>ADMIN PANEL</h1>
+        <p>Modifica setările globale pentru toți membrii.</p>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- TAXA SAPTAMANA -->
+        <div class="card">
+          <h2>Taxa Saptamana</h2>
+          <p class="highlight"><%= taxaSaptamana %></p>
+          <form action="/admin/update-taxa-saptamana" method="POST">
+            <input type="text" name="taxaSaptamana" placeholder="Noua taxa saptamanala" required />
+            <button type="submit">Actualizeaza</button>
+          </form>
+        </div>
+
+        <!-- TAXA AFISATA -->
+        <div class="card">
+          <h2>Taxa Afisata</h2>
+          <p class="highlight">
+            Taxa<br>
+            <%= taxaAfisataDate %><br>
+            Taxa saptamanala este:<br>
+            <%= taxaAfisataText %>
+          </p>
+          <form action="/admin/update-taxa-afisata" method="POST">
+            <input type="text" name="taxaAfisataDate" placeholder="Data ex: 26 Jan 2026" required />
+            <textarea name="taxaAfisataText" rows="4" placeholder="Text taxa ex: 2 ceas aur, 5 portofele, 5 brichete" required></textarea>
+            <button type="submit">Actualizeaza</button>
+          </form>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</body>
+</html>

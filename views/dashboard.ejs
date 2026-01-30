@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard – Bogota Thugs</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app">
+    <%- include('partials/sidebar'); %>
+
+    <main class="content">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <p>Bine ai venit, <%= user.username %>!</p>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- TAXA SAPTAMANA -->
+        <div class="card">
+          <h2>Taxa Saptamana</h2>
+          <p class="highlight"><%= taxaSaptamana %></p>
+          <span>Taxa generala pentru toti membrii</span>
+        </div>
+
+        <!-- TAXA AFISATA -->
+        <div class="card">
+          <h2>Taxa</h2>
+          <p class="highlight"><%= taxaAfisataDate %></p>
+          <span>Taxa saptamanala este:</span>
+          <p><%= taxaAfisataText %></p>
+        </div>
+
+        <!-- Timp in Familie -->
+        <div class="card">
+          <h2>Timp in Familie</h2>
+          <p class="highlight"><%= timpInFamilie %></p>
+          <span>Durata de cand esti membru</span>
+        </div>
+
+        <!-- ADMIN SHORTCUTS -->
+        <% if (isFullAccess) { %>
+        <div class="card">
+          <h2>Administrare</h2>
+          <p class="highlight">Acces complet</p>
+          <a href="/admin" class="button">Admin Panel</a>
+          <a href="/members" class="button">Gestioneaza Membri</a>
+        </div>
+        <% } %>
+
+      </div>
+    </main>
+  </div>
+</body>
+</html>

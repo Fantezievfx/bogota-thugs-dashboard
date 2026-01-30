@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bogota Thugs – Membri</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app">
+    <%- include('partials/sidebar'); %>
+
+    <main class="content">
+      <div class="page-header">
+        <h1>GESTIONARE MEMBRI</h1>
+        <p>Adauga, editeaza sau sterge membrii din panel.</p>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- Adauga Membru -->
+        <div class="card">
+          <h2>Adauga Membru</h2>
+          <form action="/members/add" method="POST">
+            <input type="text" name="discordId" placeholder="Discord ID" required />
+            <select name="role">
+              <option value="<%= ROLES.MEMBRU %>">Membru</option>
+              <option value="<%= ROLES.TESTER %>">Tester</option>
+              <option value="<%= ROLES.CO_LIDER %>">Co Lider</option>
+              <option value="<%= ROLES.LIDER %>">Lider</option>
+              <option value="<%= ROLES.DEV %>">Developer</option>
+            </select>
+            <button type="submit">Adauga</button>
+          </form>
+        </div>
+
+        <!-- Role Manager -->
+        <div class="card">
+          <h2>Schimba Rol</h2>
+          <form action="/admin/roles/update" method="POST">
+            <input type="text" name="discordId" placeholder="Discord ID" required />
+            <select name="role">
+              <option value="<%= ROLES.MEMBRU %>">Membru</option>
+              <option value="<%= ROLES.TESTER %>">Tester</option>
+              <option value="<%= ROLES.CO_LIDER %>">Co Lider</option>
+              <option value="<%= ROLES.LIDER %>">Lider</option>
+              <option value="<%= ROLES.DEV %>">Developer</option>
+            </select>
+            <button type="submit">Schimba Rol</button>
+          </form>
+        </div>
+
+        <!-- Remove Member -->
+        <div class="card">
+          <h2>Sterge Membru</h2>
+          <form action="/members/remove" method="POST">
+            <input type="text" name="discordId" placeholder="Discord ID de sters" required />
+            <button type="submit">Sterge</button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Lista Membri -->
+      <div class="card">
+        <h2>Lista Membri</h2>
+        <% members.forEach(m => { %>
+          <div class="member-row">
+            <span class="member-name"><%= m.id %></span>
+            <% 
+              let cls = 'role-membru';
+              if (m.role === ROLES.DEV) cls = 'role-dev';
+              else if (m.role === ROLES.LIDER) cls = 'role-lider';
+              else if (m.role === ROLES.CO_LIDER) cls = 'role-co-lider';
+              else if (m.role === ROLES.TESTER) cls = 'role-tester';
+            %>
+            <span class="role-badge <%= cls %>"><%= m.role %></span>
+          </div>
+        <% }) %>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

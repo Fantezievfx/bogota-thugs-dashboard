@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login – Bogota Thugs</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('/background.jpg'); /* You can change this filename */
+      background-size: cover;
+      background-position: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px 60px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #ff9800;
+    }
+
+    .login-box h1 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #ff9800;
+      text-shadow: 0 0 10px #ff9800;
+    }
+
+    .discord-button {
+      display: inline-flex;
+      align-items: center;
+      background-color: #5865F2;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .discord-button:hover {
+      background-color: #4752c4;
+    }
+
+    .discord-button img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <h1>Bogota Thugs Panel</h1>
+      <a class="discord-button" href="/auth/discord">
+        <img src="/discord-logo.png" alt="Discord Logo" />
+        Login with Discord
+      </a>
+    </div>
+  </div>
+</body>
+</html>
