@@ -27,14 +27,10 @@ const CAN_ADD_MEMBERS_ROLES = [ROLES.LIDER, ROLES.CO_LIDER, ROLES.TESTER];
    ========================= */
 
 let taxaSaptamana = 'TAXA LIBERA PERMANENTA';
-let sanctiuniActive = 'NICIUN FW';
-let taxaItems = '2 ceas aur, 5 portofele, 5 brichete';
-
 let taxaAfisataDate = '26 Jan 2026';
 let taxaAfisataText = '2 ceas aur, 5 portofele, 5 brichete';
 
 let userRoles = {
-  // YOU
   '432966960800595990': [ROLES.DEV, ROLES.LIDER, ROLES.CO_LIDER]
 };
 
@@ -49,13 +45,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'supersecret',
-    resave: false,
-    saveUninitialized: false
-  })
-);
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'supersecret',
+  resave: false,
+  saveUninitialized: false
+}));
 
 /* =========================
    PASSPORT / DISCORD OAUTH
@@ -64,26 +58,24 @@ app.use(
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
 
-passport.use(
-  new DiscordStrategy(
-    {
-      clientID: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      callbackURL: process.env.DISCORD_CALLBACK_URL,
-      scope: ['identify']
-    },
-    (accessToken, refreshToken, profile, done) => {
-      const roles = userRoles[profile.id] || [ROLES.MEMBRU];
-      profile.appRoles = roles;
-
-      profile.avatarUrl = profile.avatar
-        ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`
-        : 'https://cdn.discordapp.com/embed/avatars/0.png';
-
-      return done(null, profile);
-    }
-  )
-);
+passport.use(new DiscordStrategy({
+  clientID: process.env.DISCORD_CLIENT_ID,
+  clientSecret: process.env.DISCORD_CLIENT_SECRET,
+  callbackURL: process.env.DISCORD_CALLBACK_URL,
+  scope: ['identify']
+}, (accessToken, refreshToken, profile, done) => {
+  try {
+    const roles = (profile && profile.id && userRoles[profile.id]) || [ROLES.MEMBRU];
+    profile.appRoles = roles;
+    profile.avatarUrl = profile.avatar
+      ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`
+      : 'https://cdn.discordapp.com/embed/avatars/0.png';
+    return done(null, profile);
+  } catch (err) {
+    console.error('OAuth error:', err);
+    return done(err, null);
+  }
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -120,8 +112,7 @@ app.get('/login', (req, res) => res.render('login'));
 
 app.get('/auth/discord', passport.authenticate('discord'));
 
-app.get(
-  '/auth/discord/callback',
+app.get('/auth/discord/callback',
   passport.authenticate('discord', { failureRedirect: '/login' }),
   (req, res) => {
     res.redirect('/dashboard');
@@ -155,8 +146,6 @@ app.get('/dashboard', isLoggedIn, (req, res) => {
     user: req.user,
     ROLES,
     taxaSaptamana,
-    sanctiuniActive,
-    taxaItems,
     taxaAfisataDate,
     taxaAfisataText,
     timpInFamilie,
@@ -263,6 +252,15 @@ app.post('/members/remove', hasAnyRole(FULL_ACCESS_ROLES), (req, res) => {
   }
 
   res.redirect('/members');
+});
+
+/* =========================
+   ERROR HANDLING
+   ========================= */
+
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).send('Internal Server Error');
 });
 
 /* =========================
